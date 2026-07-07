@@ -4,6 +4,7 @@
 #include "Buttons.h"
 #include "Clock.h"
 #include "Buzzer.h"
+#include "Alarm.h"
 
 void setup() {
   setupDisplay();
@@ -25,7 +26,7 @@ void loop() {
   handleAdjustments(currentMillis);
   tickClock(currentMillis);
   handleSettingsBlink(currentMillis);
-  // handleBuzzer();
+  checkAlarm(currentMillis);
 
   saveButtonStates();
 }

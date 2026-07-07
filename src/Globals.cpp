@@ -7,10 +7,14 @@ unsigned long previousClockMillis = 0;
 
 const int btnUp = A0;
 const int btnDown = A1;
+const int btnAlarmStop = A2;
 int upState = HIGH;
 int downState = HIGH;
+int alarmStopState = HIGH;
 int lastBtnUpState = HIGH;
 int lastBtnDownState = HIGH;
+int lastBtnAlarmStopState = HIGH;
+const int buzzerPin = 13;
 
 bool inSettingsMode = false;
 bool holdingBoth = false;

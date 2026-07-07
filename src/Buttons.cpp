@@ -5,16 +5,19 @@
 void setupButtons() {
   pinMode(btnUp, INPUT);
   pinMode(btnDown, INPUT);
+  pinMode(btnAlarmStop, INPUT);
 }
 
 void readButtons(unsigned long currentMillis) {
   upState = digitalRead(btnUp) == HIGH ? LOW : HIGH;
   downState = digitalRead(btnDown) == HIGH ? LOW : HIGH;
+  alarmStopState = digitalRead(btnAlarmStop) == HIGH ? LOW : HIGH;
 }
 
 void saveButtonStates() {
   lastBtnUpState = upState;
   lastBtnDownState = downState;
+  lastBtnAlarmStopState = alarmStopState;
 }
 
 // Handles the 3-second hold to enter/exit settings

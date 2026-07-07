@@ -1,8 +1,6 @@
 #include "Buzzer.h"
 #include "Globals.h"
 
-const int buzzerPin = 13;
-
 // A short ascending chime - swap these out for whatever you like
 static int melodyNotes[] = {523, 659, 784, 1047}; // C5, E5, G5, C6
 static int melodyDurations[] = {120, 120, 120, 200}; // ms per note
@@ -17,16 +15,16 @@ void setupBuzzer() {
 }
 
 // Simple beep while a button is held
-void handleBuzzer() {
-  if (upState == LOW) {
-    digitalWrite(buzzerPin, HIGH); // button pressed - buzz
-  } else if (downState == LOW) {
-    digitalWrite(buzzerPin, HIGH); // button pressed - buzz
-  } 
-  else {
-    digitalWrite(buzzerPin, LOW);  // no button pressed - silent
-  }
-}
+// void handleBuzzer() {
+//   if (upState == LOW) {
+//     digitalWrite(buzzerPin, HIGH); // button pressed - buzz
+//   } else if (downState == LOW) {
+//     digitalWrite(buzzerPin, HIGH); // button pressed - buzz
+//   } 
+//   else {
+//     digitalWrite(buzzerPin, LOW);  // no button pressed - silent
+//   }
+// }
 
 // // Call this anywhere (e.g. when entering/exiting settings mode) to play the chime
 // void startMelody() {

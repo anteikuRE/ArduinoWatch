@@ -12,10 +12,14 @@ extern unsigned long previousClockMillis;
 // ---------- Button pins & states ----------
 extern const int btnUp;
 extern const int btnDown;
+extern const int btnAlarmStop;
 extern int upState;
 extern int downState;
+extern int alarmStopState;
 extern int lastBtnUpState;
 extern int lastBtnDownState;
+extern int lastBtnAlarmStopState;
+extern const int buzzerPin;
 
 // ---------- System modes & timers ----------
 extern bool inSettingsMode;
