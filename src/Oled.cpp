@@ -8,13 +8,6 @@
 #define OLED_RESET     -1
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
-// Ball variables
-int ballX = 64;
-int ballY = 32;
-int ballDX = 2;
-int ballDY = 2;
-int ballRadius = 3;
-
 void setupDisplay() {
   display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
   display.clearDisplay();
