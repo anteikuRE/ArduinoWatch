@@ -17,7 +17,11 @@ bool holdingBoth = false;
 bool modeJustChanged = false;
 unsigned long bothHoldTimer = 0;
 unsigned long lastActivityTimer = 0;
+unsigned long lastFieldSwitchMillis = 0;
 
 bool blinkOn = true;
 unsigned long previousBlinkMillis = 0;
 const unsigned long blinkInterval = 400; // ms
+
+// Handles button presses to change the time
+EditField currentField = EDIT_HOURS;

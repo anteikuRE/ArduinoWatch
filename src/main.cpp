@@ -1,6 +1,6 @@
 #include <Arduino.h>
 #include "Globals.h"
-#include "Display.h"
+#include "Oled.h"
 #include "Buttons.h"
 #include "Clock.h"
 #include "Buzzer.h"
@@ -26,9 +26,6 @@ void loop() {
   tickClock(currentMillis);
   handleSettingsBlink(currentMillis);
   // handleBuzzer();
-
-  // Must run every loop pass, as fast as possible, or the digits flicker/dim.
-  refreshDisplayMux();
 
   saveButtonStates();
 }

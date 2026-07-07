@@ -1,6 +1,6 @@
 #include "Clock.h"
 #include "Globals.h"
-#include "Display.h"
+#include "Oled.h"
 
 void tickClock(unsigned long currentMillis) {
   if (currentMillis - previousClockMillis >= 1000) {

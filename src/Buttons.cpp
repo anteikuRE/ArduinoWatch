@@ -1,6 +1,6 @@
 #include "Buttons.h"
 #include "Globals.h"
-#include "Display.h"
+#include "Oled.h"
 
 void setupButtons() {
   pinMode(btnUp, INPUT);
@@ -51,22 +51,46 @@ void checkSettingsTimeout(unsigned long currentMillis) {
 // Handles button presses to change the time
 void handleAdjustments(unsigned long currentMillis) {
   if (!inSettingsMode || holdingBoth) return; // Only adjust in settings mode
-
+  long modeDelayTime = 5000;
   bool timeChanged = false;
 
-  // Minute UP
+ // If 5 seconds pass with no field switch, toggle between hours/minutes
+  if (currentMillis - lastFieldSwitchMillis >= modeDelayTime) {
+    currentField = (currentField == EDIT_HOURS) ? EDIT_MINUTES : EDIT_HOURS;
+    lastFieldSwitchMillis = currentMillis;
+  }
+
+  // UP button
   if (upState == LOW && lastBtnUpState == HIGH) {
-    minutes++;
-    seconds = 0;
-    if (minutes >= 60) { minutes = 0; hours++; if (hours >= 24) hours = 0; }
+    if (currentField == EDIT_HOURS) {
+      hours++;
+      if (hours >= 24) hours = 0;
+    } else {
+      minutes++;
+      seconds = 0;
+      if (minutes >= 60) {
+        minutes = 0;
+        hours++;
+        if (hours >= 24) hours = 0;
+      }
+    }
     timeChanged = true;
   }
 
-  // Minute DOWN
+  // DOWN button
   if (downState == LOW && lastBtnDownState == HIGH) {
-    minutes--;
-    seconds = 0;
-    if (minutes < 0) { minutes = 59; hours--; if (hours < 0) hours = 23; }
+    if (currentField == EDIT_HOURS) {
+      hours--;
+      if (hours < 0) hours = 23;
+    } else {
+      minutes--;
+      seconds = 0;
+      if (minutes < 0) {
+        minutes = 59;
+        hours--;
+        if (hours < 0) hours = 23;
+      }
+    }
     timeChanged = true;
   }
 

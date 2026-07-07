@@ -1,10 +1,9 @@
-#ifndef DISPLAY_H
-#define DISPLAY_H
+#ifndef OLED_H
+#define OLED_H
 
 #include <Arduino.h>
 
 void setupDisplay();
-void refreshDisplayMux();
 void updateDisplayBuffer();
 
 #endif
