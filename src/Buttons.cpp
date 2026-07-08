@@ -131,7 +131,7 @@ void handleAlarmAddition(unsigned long currentMillis) {
   int tempHours = hours;
   int tempMinutes = minutes;
   int tempSeconds = seconds;
-  adjustTimeField(timeChanged, hours, minutes, seconds);
+  adjustTimeField(timeChanged, tempHours, tempMinutes, tempSeconds);
 
   if (timeChanged) {
     lastActivityTimer = currentMillis; // Reset the 10-second timeout!
@@ -163,7 +163,7 @@ void handleAdjustments(unsigned long currentMillis) {
 
 // Handles the colon-blink animation while in settings mode
 void handleSettingsBlink(unsigned long currentMillis) {
-  if (!inSettingsMode || !inAlarmSettingsMode) return;
+  if (!inSettingsMode && !inAlarmSettingsMode) return;
 
   if (currentMillis - previousBlinkMillis >= blinkInterval) {
     previousBlinkMillis = currentMillis;

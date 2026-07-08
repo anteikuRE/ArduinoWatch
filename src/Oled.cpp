@@ -26,15 +26,12 @@ void updateDisplayBuffer() {
 
   display.clearDisplay();
 
-  if (inSettingsMode) {
-    display.setTextSize(1);
-    display.setCursor(15, 0);
-    // if(inSettingsMode) {
-      display.println("Set The Clock!");
-    // } else if (inAlarmSettingsMode) {
-      // display.println("Set Alarm Time!");
-    // }
-    // display.println("Set The Clock!");
+  if (inSettingsMode || inAlarmSettingsMode) {
+  const char* headerText = inSettingsMode ? "Set The Clock!" : "Set Alarm Time!";
+
+  display.setTextSize(1);
+  display.setCursor(15, 0);
+  display.println(headerText);
 
     display.setTextSize(3);
     display.setCursor(20, 28);
