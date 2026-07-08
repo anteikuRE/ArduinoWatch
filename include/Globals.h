@@ -23,6 +23,7 @@ extern const int buzzerPin;
 
 // ---------- System modes & timers ----------
 extern bool inSettingsMode;
+extern bool inAlarmSettingsMode;
 extern bool holdingBoth;
 extern bool modeJustChanged;
 extern unsigned long bothHoldTimer;

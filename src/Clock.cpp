@@ -17,7 +17,7 @@ void tickClock(unsigned long currentMillis) {
       }
     }
 
-    if (!inSettingsMode) {
+    if (!inSettingsMode || !inAlarmSettingsMode) {
       updateDisplayBuffer(); // colon blinks with the seconds tick
     }
   }

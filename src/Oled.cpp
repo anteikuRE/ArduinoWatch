@@ -21,7 +21,7 @@ void setupDisplay() {
 
 void updateDisplayBuffer() {
   char timeStr[6]; // "HH:MM" + null terminator
-  char sep = (inSettingsMode || seconds % 2 == 0) ? ':' : ' ';
+  char sep = (inSettingsMode || inAlarmSettingsMode || seconds % 2 == 0) ? ':' : ' ';
   sprintf(timeStr, "%02d%c%02d", hours, sep, minutes);
 
   display.clearDisplay();
@@ -29,7 +29,12 @@ void updateDisplayBuffer() {
   if (inSettingsMode) {
     display.setTextSize(1);
     display.setCursor(15, 0);
-    display.println("Set The Clock!");
+    // if(inSettingsMode) {
+      display.println("Set The Clock!");
+    // } else if (inAlarmSettingsMode) {
+      // display.println("Set Alarm Time!");
+    // }
+    // display.println("Set The Clock!");
 
     display.setTextSize(3);
     display.setCursor(20, 28);

@@ -17,6 +17,7 @@ int lastBtnAlarmStopState = HIGH;
 const int buzzerPin = 13;
 
 bool inSettingsMode = false;
+bool inAlarmSettingsMode = false;
 bool holdingBoth = false;
 bool modeJustChanged = false;
 unsigned long bothHoldTimer = 0;

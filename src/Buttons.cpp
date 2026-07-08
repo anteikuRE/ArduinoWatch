@@ -20,8 +20,30 @@ void saveButtonStates() {
   lastBtnAlarmStopState = alarmStopState;
 }
 
+bool holdingAlarmStop = false;
+bool alarmModeJustChanged = false;
+unsigned long alarmHoldTimer = 0;
+
 // Handles the 3-second hold to enter/exit settings
 void checkModeToggle(unsigned long currentMillis) {
+ if (alarmStopState == LOW) {
+    if (!holdingAlarmStop) {
+      holdingAlarmStop = true;
+      alarmHoldTimer = currentMillis;
+      alarmModeJustChanged = false;
+    } else if (!alarmModeJustChanged && (currentMillis - alarmHoldTimer >= 3000)) {
+      inAlarmSettingsMode = !inAlarmSettingsMode;
+      alarmModeJustChanged = true;
+      lastActivityTimer = currentMillis; // Reset the idle timer!
+      blinkOn = true;
+      previousBlinkMillis = currentMillis;
+      updateDisplayBuffer();
+    }
+  } else {
+    holdingAlarmStop = false;
+  }
+
+
   if (upState == LOW && downState == LOW) {
     if (!holdingBoth) {
       holdingBoth = true;
@@ -49,19 +71,15 @@ void checkSettingsTimeout(unsigned long currentMillis) {
       updateDisplayBuffer();
     }
   }
+  if(inAlarmSettingsMode && !holdingAlarmStop) {
+    if (currentMillis - lastActivityTimer >= 10000) {
+      inAlarmSettingsMode = false; // Auto-exit
+      updateDisplayBuffer();
+    }
+  }
 }
 
-// Handles button presses to change the time
-void handleAdjustments(unsigned long currentMillis) {
-  if (!inSettingsMode || holdingBoth) return; // Only adjust in settings mode
-  long modeDelayTime = 5000;
-  bool timeChanged = false;
-
- // If 5 seconds pass with no field switch, toggle between hours/minutes
-  if (currentMillis - lastFieldSwitchMillis >= modeDelayTime) {
-    currentField = (currentField == EDIT_HOURS) ? EDIT_MINUTES : EDIT_HOURS;
-    lastFieldSwitchMillis = currentMillis;
-  }
+void adjustTimeField(bool &timeChanged, int &hours, int &minutes, int &seconds) {
 
   // UP button
   if (upState == LOW && lastBtnUpState == HIGH) {
@@ -96,6 +114,45 @@ void handleAdjustments(unsigned long currentMillis) {
     }
     timeChanged = true;
   }
+}
+
+// Handles button presses to change the time
+void handleAlarmAddition(unsigned long currentMillis) {
+  if (!inAlarmSettingsMode) return; // Only adjust in settings mode
+  long modeDelayTime = 5000;
+  bool timeChanged = false;
+
+ // If 5 seconds pass with no field switch, toggle between hours/minutes
+  if (currentMillis - lastFieldSwitchMillis >= modeDelayTime) {
+    currentField = (currentField == EDIT_HOURS) ? EDIT_MINUTES : EDIT_HOURS;
+    lastFieldSwitchMillis = currentMillis;
+  }
+
+  int tempHours = hours;
+  int tempMinutes = minutes;
+  int tempSeconds = seconds;
+  adjustTimeField(timeChanged, hours, minutes, seconds);
+
+  if (timeChanged) {
+    lastActivityTimer = currentMillis; // Reset the 10-second timeout!
+    updateDisplayBuffer();
+    delay(50); // debounce
+  }
+}
+
+// Handles button presses to change the time
+void handleAdjustments(unsigned long currentMillis) {
+  if (!inSettingsMode || holdingBoth) return; // Only adjust in settings mode
+  long modeDelayTime = 5000;
+  bool timeChanged = false;
+
+ // If 5 seconds pass with no field switch, toggle between hours/minutes
+  if (currentMillis - lastFieldSwitchMillis >= modeDelayTime) {
+    currentField = (currentField == EDIT_HOURS) ? EDIT_MINUTES : EDIT_HOURS;
+    lastFieldSwitchMillis = currentMillis;
+  }
+
+  adjustTimeField(timeChanged, hours, minutes, seconds);
 
   if (timeChanged) {
     lastActivityTimer = currentMillis; // Reset the 10-second timeout!
@@ -106,7 +163,7 @@ void handleAdjustments(unsigned long currentMillis) {
 
 // Handles the colon-blink animation while in settings mode
 void handleSettingsBlink(unsigned long currentMillis) {
-  if (!inSettingsMode) return;
+  if (!inSettingsMode || !inAlarmSettingsMode) return;
 
   if (currentMillis - previousBlinkMillis >= blinkInterval) {
     previousBlinkMillis = currentMillis;

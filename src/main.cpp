@@ -24,6 +24,7 @@ void loop() {
   checkModeToggle(currentMillis);
   checkSettingsTimeout(currentMillis);
   handleAdjustments(currentMillis);
+  handleAlarmAddition(currentMillis);
   tickClock(currentMillis);
   handleSettingsBlink(currentMillis);
   checkAlarm(currentMillis);
