@@ -25,16 +25,27 @@ void updateDisplayBuffer() {
   sprintf(timeStr, "%02d%c%02d", hours, sep, minutes);
 
   display.clearDisplay();
-  display.setTextSize(4);
-  display.setCursor(6, 28);
-  display.println(timeStr);
 
-  if (inSettingsMode && !blinkOn) {
-    if (currentField == EDIT_HOURS) {
-      display.fillRect(6, 28, 44, 32, SSD1306_BLACK);
-    } else { // EDIT_MINUTES
-      display.fillRect(75, 28, 50, 32, SSD1306_BLACK);
+  if (inSettingsMode) {
+    display.setTextSize(1);
+    display.setCursor(15, 0);
+    display.println("Set The Clock!");
+
+    display.setTextSize(3);
+    display.setCursor(20, 28);
+    display.println(timeStr);
+
+    if (!blinkOn) {
+      if (currentField == EDIT_HOURS) {
+        display.fillRect(6, 28, 50, 32, SSD1306_BLACK);
+      } else { // EDIT_MINUTES
+        display.fillRect(72, 28, 50, 32, SSD1306_BLACK);
+      }
     }
+  } else {
+    display.setTextSize(4);
+    display.setCursor(6, 28);
+    display.println(timeStr);
   }
 
   display.display();
