@@ -22,7 +22,12 @@ void setupDisplay() {
 void updateDisplayBuffer() {
   char timeStr[6]; // "HH:MM" + null terminator
   char sep = (inSettingsMode || inAlarmSettingsMode || seconds % 2 == 0) ? ':' : ' ';
-  sprintf(timeStr, "%02d%c%02d", hours, sep, minutes);
+  
+  int displayHours = inAlarmSettingsMode ? alarms[editingAlarmIndex].hour : hours;
+  int displayMinutes = inAlarmSettingsMode ? alarms[editingAlarmIndex].minute : minutes;
+  int displaySeconds = inAlarmSettingsMode ? alarms[editingAlarmIndex].seconds : seconds;
+  
+  sprintf(timeStr, "%02d%c%02d", displayHours, sep, displayMinutes);
 
   display.clearDisplay();
 

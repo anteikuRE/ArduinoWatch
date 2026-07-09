@@ -39,4 +39,18 @@ extern const unsigned long blinkInterval;
 // ---------- Handles button presses to change the time ----------
 enum EditField { EDIT_HOURS, EDIT_MINUTES };
 extern EditField currentField;
+
+// ---------- Alarm structure ----------
+struct Alarm {
+  int hour;
+  int minute;
+  int seconds;
+  bool enabled;
+  bool triggeredToday;
+};
+
+const int MAX_ALARMS = 5;
+
+extern Alarm alarms[MAX_ALARMS];
+extern int editingAlarmIndex;
 #endif

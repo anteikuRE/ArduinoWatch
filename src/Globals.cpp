@@ -30,3 +30,14 @@ const unsigned long blinkInterval = 400; // ms
 
 // Handles button presses to change the time
 EditField currentField = EDIT_HOURS;
+
+
+Alarm alarms[MAX_ALARMS] = {
+  {7, 0, 0, false, false},
+  {7, 0, 0, false, false},
+  {7, 0, 0, false, false},
+  {7, 0, 0, false, false},
+  {7, 0, 0, false, false}
+};
+
+int editingAlarmIndex = 0;

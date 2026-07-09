@@ -1,4 +1,5 @@
 #include "Buttons.h"
+#include "Alarm.h"
 #include "Globals.h"
 #include "Oled.h"
 
@@ -32,7 +33,11 @@ void checkModeToggle(unsigned long currentMillis) {
       alarmHoldTimer = currentMillis;
       alarmModeJustChanged = false;
     } else if (!alarmModeJustChanged && (currentMillis - alarmHoldTimer >= 3000)) {
-      inAlarmSettingsMode = !inAlarmSettingsMode;
+         if (!inAlarmSettingsMode) {
+        addNewAlarm(); // finds a free slot, sets enabled=true, sets editingAlarmIndex, sets inAlarmSettingsMode=true
+      } else {
+        inAlarmSettingsMode = false; // exiting
+      }
       alarmModeJustChanged = true;
       lastActivityTimer = currentMillis; // Reset the idle timer!
       blinkOn = true;
@@ -128,10 +133,7 @@ void handleAlarmAddition(unsigned long currentMillis) {
     lastFieldSwitchMillis = currentMillis;
   }
 
-  int tempHours = hours;
-  int tempMinutes = minutes;
-  int tempSeconds = seconds;
-  adjustTimeField(timeChanged, tempHours, tempMinutes, tempSeconds);
+  adjustTimeField(timeChanged, alarms[editingAlarmIndex].hour, alarms[editingAlarmIndex].minute, alarms[editingAlarmIndex].seconds);
 
   if (timeChanged) {
     lastActivityTimer = currentMillis; // Reset the 10-second timeout!
