@@ -10,6 +10,8 @@ void checkModeToggle(unsigned long currentMillis);
 void checkSettingsTimeout(unsigned long currentMillis);
 void handleAdjustments(unsigned long currentMillis);
 void handleAlarmAddition(unsigned long currentMillis);
+void handleAlarmListNavigation(unsigned long currentMillis);
+void handleAlarmDeletion(unsigned long currentMillis);
 void handleSettingsBlink(unsigned long currentMillis);
 
 #endif

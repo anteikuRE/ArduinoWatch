@@ -5,5 +5,6 @@
 
 void setupDisplay();
 void updateDisplayBuffer();
+void drawAlarmList();
 
 #endif

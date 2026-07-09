@@ -6,6 +6,7 @@
 void checkAlarm(unsigned long currentMillis);
 void handleBuzzer(unsigned long currentMillis);
 void addNewAlarm();
+void deleteAlarm(int index);
 void stopAlarm();
 
 #endif

@@ -53,4 +53,11 @@ const int MAX_ALARMS = 5;
 
 extern Alarm alarms[MAX_ALARMS];
 extern int editingAlarmIndex;
+
+// ---------- View Alarms mode ----------
+extern bool inViewAlarmsMode;
+extern bool holdingTriple;
+extern unsigned long tripleHoldTimer;
+extern bool tripleModeJustChanged;
+extern int selectedAlarmIndex;
 #endif

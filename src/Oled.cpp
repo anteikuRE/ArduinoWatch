@@ -19,6 +19,39 @@ void setupDisplay() {
   delay(1000);  // Show greeting for 1 second
 }
 
+
+void drawAlarmList() {
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setCursor(20, 0);
+  display.println("Alarms");
+
+  int lineY = 12;
+  int lineHeight = 10;
+
+  for (int i = 0; i < MAX_ALARMS; i++) {
+    display.setCursor(0, lineY);
+
+    if (i == selectedAlarmIndex) {
+      display.print(">");
+    } else {
+      display.print(" ");
+    }
+
+    if (alarms[i].enabled) {
+      char line[16];
+      sprintf(line, " %02d:%02d", alarms[i].hour, alarms[i].minute);
+      display.print(line);
+    } else {
+      display.print(" --:-- (empty)");
+    }
+
+    lineY += lineHeight;
+  }
+
+  display.display();
+}
+
 void updateDisplayBuffer() {
   char timeStr[6]; // "HH:MM" + null terminator
   char sep = (inSettingsMode || inAlarmSettingsMode || seconds % 2 == 0) ? ':' : ' ';
@@ -31,7 +64,9 @@ void updateDisplayBuffer() {
 
   display.clearDisplay();
 
-  if (inSettingsMode || inAlarmSettingsMode) {
+  if (inViewAlarmsMode) {
+  drawAlarmList();
+} else if (inSettingsMode || inAlarmSettingsMode) {
   const char* headerText = inSettingsMode ? "Set The Clock!" : "Set Alarm Time!";
 
   display.setTextSize(1);

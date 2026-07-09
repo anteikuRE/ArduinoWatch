@@ -25,6 +25,8 @@ void loop() {
   checkSettingsTimeout(currentMillis);
   handleAdjustments(currentMillis);
   handleAlarmAddition(currentMillis);
+  handleAlarmListNavigation(currentMillis);
+  handleAlarmDeletion(currentMillis);
   tickClock(currentMillis);
   handleSettingsBlink(currentMillis);
   checkAlarm(currentMillis);

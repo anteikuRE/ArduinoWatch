@@ -33,11 +33,18 @@ EditField currentField = EDIT_HOURS;
 
 
 Alarm alarms[MAX_ALARMS] = {
+  {7, 0, 0, true, false},
   {7, 0, 0, false, false},
-  {7, 0, 0, false, false},
-  {7, 0, 0, false, false},
+  {7, 20, 0, true, false},
   {7, 0, 0, false, false},
   {7, 0, 0, false, false}
 };
 
 int editingAlarmIndex = 0;
+
+// ---------- View Alarms mode ----------
+bool inViewAlarmsMode = false;
+bool holdingTriple = false;
+unsigned long tripleHoldTimer = 0;
+bool tripleModeJustChanged = false;
+int selectedAlarmIndex = 0;

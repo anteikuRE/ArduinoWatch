@@ -27,7 +27,7 @@ unsigned long alarmHoldTimer = 0;
 
 // Handles the 3-second hold to enter/exit settings
 void checkModeToggle(unsigned long currentMillis) {
- if (alarmStopState == LOW) {
+ if (!inViewAlarmsMode && alarmStopState == LOW && upState == HIGH && downState == HIGH) {
     if (!holdingAlarmStop) {
       holdingAlarmStop = true;
       alarmHoldTimer = currentMillis;
@@ -49,7 +49,7 @@ void checkModeToggle(unsigned long currentMillis) {
   }
 
 
-  if (upState == LOW && downState == LOW) {
+  if (!inViewAlarmsMode && upState == LOW && downState == LOW && alarmStopState == HIGH) {
     if (!holdingBoth) {
       holdingBoth = true;
       bothHoldTimer = currentMillis;
@@ -65,6 +65,24 @@ void checkModeToggle(unsigned long currentMillis) {
     }
   } else {
     holdingBoth = false;
+  }
+
+  if (upState == LOW && downState == LOW && alarmStopState == LOW) {
+    if (!holdingTriple) {
+      holdingTriple = true;
+      tripleHoldTimer = currentMillis;
+      tripleModeJustChanged = false;
+    } else if (!tripleModeJustChanged && (currentMillis - tripleHoldTimer >= 5000)) {
+      inViewAlarmsMode = !inViewAlarmsMode;
+      if (inViewAlarmsMode) {
+        selectedAlarmIndex = 0; // start at the top of the list
+      }
+      tripleModeJustChanged = true;
+      lastActivityTimer = currentMillis;
+      updateDisplayBuffer();
+    }
+  } else {
+    holdingTriple = false;
   }
 }
 
@@ -172,4 +190,51 @@ void handleSettingsBlink(unsigned long currentMillis) {
     blinkOn = !blinkOn;
     updateDisplayBuffer();
   }
+}
+
+void handleAlarmListNavigation(unsigned long currentMillis) {
+  if (!inViewAlarmsMode || holdingBoth || holdingTriple) return;
+
+  bool selectionChanged = false;
+
+  if (upState == LOW && lastBtnUpState == HIGH) {
+    selectedAlarmIndex--;
+    if (selectedAlarmIndex < 0) selectedAlarmIndex = MAX_ALARMS - 1; // wrap to bottom
+    selectionChanged = true;
+  }
+
+  if (downState == LOW && lastBtnDownState == HIGH) {
+    selectedAlarmIndex++;
+    if (selectedAlarmIndex >= MAX_ALARMS) selectedAlarmIndex = 0; // wrap to top
+    selectionChanged = true;
+  }
+
+  if (selectionChanged) {
+    lastActivityTimer = currentMillis;
+    updateDisplayBuffer(); // or drawAlarmList() directly, depending on your dispatch
+    delay(50); // debounce
+  }
+}
+
+bool lastAlarmStopState = HIGH; // tracks previous state for edge detection
+
+void handleAlarmDeletion(unsigned long currentMillis) {
+  if (!inViewAlarmsMode || upState == LOW || downState == LOW) {
+    lastAlarmStopState = alarmStopState;
+    return;
+  }
+
+  // Button just pressed
+  if (alarmStopState == LOW && lastAlarmStopState == HIGH) {
+    digitalWrite(buzzerPin, HIGH); // Quick beep to indicate deletion
+    delay(50);
+    digitalWrite(buzzerPin, LOW);
+
+    deleteAlarm(selectedAlarmIndex);
+    lastActivityTimer = currentMillis;
+    updateDisplayBuffer();
+    delay(50);
+  }
+
+  lastAlarmStopState = alarmStopState;
 }

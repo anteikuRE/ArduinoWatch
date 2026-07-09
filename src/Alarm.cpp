@@ -29,6 +29,12 @@ void addNewAlarm() {
   }
 }
 
+void deleteAlarm(int index) {
+  if (index < 0 || index >= MAX_ALARMS) return;
+  alarms[index].enabled = false;
+  alarms[index].triggeredToday = false;
+}
+
 void stopAlarm() {
   alarmActive = false;
   buzzerState = false;
