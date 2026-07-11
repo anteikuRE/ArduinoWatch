@@ -1,5 +1,8 @@
 #include "Globals.h"
 
+ThreeWire myWire(3, 2, 4); // DAT, CLK, RST pins
+RtcDS1302<ThreeWire> Rtc(myWire);
+
 int hours = 0;
 int minutes = 0;
 int seconds = 0;

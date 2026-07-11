@@ -2,6 +2,11 @@
 #define GLOBALS_H
 
 #include <Arduino.h>
+#include <ThreeWire.h>
+#include <RtcDS1302.h>
+
+extern ThreeWire myWire;
+extern RtcDS1302<ThreeWire> Rtc;
 
 // ---------- Time tracking ----------
 extern int hours;

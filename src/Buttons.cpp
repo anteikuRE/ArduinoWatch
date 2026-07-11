@@ -21,6 +21,15 @@ void saveButtonStates() {
   lastBtnAlarmStopState = alarmStopState;
 }
 
+void saveTimeToRTC() {
+  RtcDateTime current = Rtc.GetDateTime();
+  RtcDateTime updated(
+    current.Year(), current.Month(), current.Day(),
+    hours, minutes, 0
+  );
+  Rtc.SetDateTime(updated);
+}
+
 bool holdingAlarmStop = false;
 bool alarmModeJustChanged = false;
 unsigned long alarmHoldTimer = 0;
@@ -56,7 +65,14 @@ void checkModeToggle(unsigned long currentMillis) {
       modeJustChanged = false;
     } else if (!modeJustChanged && (currentMillis - bothHoldTimer >= 3000)) {
       // 3 seconds reached! Toggle mode.
-      inSettingsMode = !inSettingsMode;
+
+      if (inSettingsMode) {
+          saveTimeToRTC();
+          inSettingsMode = false;
+        } else {
+          inSettingsMode = true;
+      }
+
       modeJustChanged = true;
       lastActivityTimer = currentMillis; // Reset the idle timer!
       blinkOn = true;
@@ -90,6 +106,7 @@ void checkModeToggle(unsigned long currentMillis) {
 void checkSettingsTimeout(unsigned long currentMillis) {
   if (inSettingsMode && !holdingBoth) {
     if (currentMillis - lastActivityTimer >= 10000) {
+      saveTimeToRTC();
       inSettingsMode = false; // Auto-exit
       updateDisplayBuffer();
     }

@@ -2,17 +2,17 @@
 #include "Globals.h"
 #include "Oled.h"
 #include "Buttons.h"
-#include "Clock.h"
+#include "RTClock.h"
 #include "Buzzer.h"
 #include "Alarm.h"
 
 void setup() {
+  Serial.begin(9600);
+
   setupDisplay();
   setupButtons();
   setupBuzzer();
-
-  // Grab the compile time to set initial clock
-  sscanf(__TIME__, "%d:%d:%d", &hours, &minutes, &seconds);
+  setupClock();
 
   updateDisplayBuffer();
 }
@@ -20,6 +20,7 @@ void setup() {
 void loop() {
   unsigned long currentMillis = millis();
 
+  refreshTimeState();
   readButtons(currentMillis);
   checkModeToggle(currentMillis);
   checkSettingsTimeout(currentMillis);
@@ -27,9 +28,9 @@ void loop() {
   handleAlarmAddition(currentMillis);
   handleAlarmListNavigation(currentMillis);
   handleAlarmDeletion(currentMillis);
-  tickClock(currentMillis);
   handleSettingsBlink(currentMillis);
   checkAlarm(currentMillis);
 
+  updateDisplayBuffer();
   saveButtonStates();
 }
