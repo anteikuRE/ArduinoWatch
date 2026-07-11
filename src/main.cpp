@@ -3,7 +3,8 @@
 #include "Oled.h"
 #include "Buttons.h"
 #include "RTClock.h"
-#include "Buzzer.h"
+#include "utils/Buzzer.h"
+#include "utils/Handlers.h"
 #include "Alarm.h"
 
 void setup() {

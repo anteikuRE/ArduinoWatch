@@ -4,7 +4,7 @@
 #include <Arduino.h>
 
 void setupBuzzer();
-void startMelody();
-void updateMelody();
+// void startMelody();
+// void updateMelody();
 
 #endif
